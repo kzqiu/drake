@@ -1,8 +1,10 @@
 #include "drake/examples/quadrotor/quadrotor_plant.h"
+#include "quadrotor_plant.h"
 
 #include "drake/common/default_scalars.h"
 #include "drake/math/rotation_matrix.h"
 #include "drake/systems/controllers/linear_quadratic_regulator.h"
+#include "drake/systems/controllers/linear_model_predictive_controller.h"
 
 using Eigen::Matrix3d;
 
@@ -146,6 +148,41 @@ std::unique_ptr<systems::AffineSystem<double>> StabilizingLQRController(
 
   return systems::controllers::LinearQuadraticRegulator(
       *quadrotor_plant, *quad_context_goal, Q, R);
+}
+
+std::unique_ptr<systems::AffineSystem<double>> StabilizingMPCController(
+    const QuadrotorPlant<double>* quadrotor_plant,
+    Eigen::Vector3d nominal_position,
+    double time_period,
+    double time_horizon
+) {
+  auto quad_context_goal = quadrotor_plant->CreateDefaultContext();
+
+  Eigen::VectorXd x0 = Eigen::VectorXd::Zero(12);
+  x0.topRows(3) = nominal_position;
+
+  // Nominal input corresponds to a hover.
+  Eigen::VectorXd u0 = Eigen::VectorXd::Constant(
+      4, quadrotor_plant->m() * quadrotor_plant->g() / 4);
+
+  quadrotor_plant->get_input_port(0).FixValue(quad_context_goal.get(), u0);
+  quad_context_goal->SetContinuousState(x0);
+
+  // Setup MPC cost matrices (penalize position error 10x more than velocity
+  // error).
+  Eigen::MatrixXd Q = Eigen::MatrixXd::Identity(12, 12);
+  Q.topLeftCorner<6, 6>() = 10 * Eigen::MatrixXd::Identity(6, 6);
+
+  Eigen::Matrix4d R = Eigen::Matrix4d::Identity();  
+
+  return systems::controllers::LinearModelPredictiveController(
+    *quadrotor_plant,
+    *quad_context_goal,
+    Q,
+    R,
+    time_period,
+    time_horizon
+  );
 }
 
 }  // namespace quadrotor

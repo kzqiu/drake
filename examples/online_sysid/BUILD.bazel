@@ -5,23 +5,26 @@ load(
 load("//tools/install:install_data.bzl", "install_data")
 
 drake_cc_binary(
-    name = "hello_exe",
+    name = "hello",
     srcs = ["hello.cc"],
     data = [],
     deps = [
-        "//common:text_logging_flags",
+        "//common:add_text_logging_gflags",
         "@gflags"
     ],
 )
 
 drake_cc_binary(
-    name = "online_sysid_exe",
-    srcs = ["online_sysid.cc"],
-    data = [
-        ":models",
-    ],
+    name = "sysid_mpc_quadrotor",
+    srcs = ["sysid_mpc_quadrotor.cc"],
     deps = [
-        "//common:text_logging_flags",
+        "//examples:quadrotor:quadrotor_plant",
+        "//examples:quadrotor:quadrotor_geometry",
+        "//common:is_approx_equal_abstol",
+        "//lcm",
+        "//systems/analysis:simulator",
+        "//systems/framework:diagram",
+        "//common:add_text_logging_gflags",
         "@gflags"
     ],
 )

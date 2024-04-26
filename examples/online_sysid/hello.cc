@@ -1,6 +1,6 @@
 #include <gflags/gflags.h>
 
-#include <drake/common/text_logging_flags.h>
+#include <drake/common/text_logging.h>
 
 namespace drake {
 namespace examples {

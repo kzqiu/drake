@@ -36,6 +36,7 @@ drake_cc_library(
         "//common:default_scalars",
         "//math:geometric_transform",
         "//systems/controllers:linear_quadratic_regulator",
+        "//systems/controllers:linear_model_predictive_controller",
         "//systems/framework:leaf_system",
         "//systems/primitives:affine_system",
     ],

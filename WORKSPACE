@@ -1,3 +1,8 @@
+# This file marks a workspace root for the Bazel build system.
+# See `https://bazel.build/`.
+
+workspace(name = "drake")
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 
@@ -20,12 +25,6 @@ load("@hedron_compile_commands//:workspace_setup_transitive_transitive.bzl", "he
 hedron_compile_commands_setup_transitive_transitive()
 load("@hedron_compile_commands//:workspace_setup_transitive_transitive_transitive.bzl", "hedron_compile_commands_setup_transitive_transitive_transitive")
 hedron_compile_commands_setup_transitive_transitive_transitive()
-
-
-# This file marks a workspace root for the Bazel build system.
-# See `https://bazel.build/`.
-
-workspace(name = "drake")
 
 load("//tools/workspace:default.bzl", "add_default_workspace")
 

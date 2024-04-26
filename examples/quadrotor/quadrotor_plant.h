@@ -73,6 +73,12 @@ std::unique_ptr<systems::AffineSystem<double>> StabilizingLQRController(
     const QuadrotorPlant<double>* quadrotor_plant,
     Eigen::Vector3d nominal_position);
 
+std::unique_ptr<systems::AffineSystem<double>> StabilizingMPCController(
+    const QuadrotorPlant<double>* quadrotor_plant,
+    Eigen::Vector3d nominal_position,
+    double time_period,
+    double time_horizon);
+
 }  // namespace quadrotor
 }  // namespace examples
 }  // namespace drake
