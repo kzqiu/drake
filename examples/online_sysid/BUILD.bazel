@@ -1,0 +1,28 @@
+load(
+    "//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+)
+load("//tools/install:install_data.bzl", "install_data")
+
+drake_cc_binary(
+    name = "hello_exe",
+    srcs = ["hello.cc"],
+    data = [],
+    deps = [
+        "//common:text_logging_flags",
+        "@gflags"
+    ],
+)
+
+drake_cc_binary(
+    name = "online_sysid_exe",
+    srcs = ["online_sysid.cc"],
+    data = [
+        ":models",
+    ],
+    deps = [
+        "//common:text_logging_flags",
+        "@gflags"
+    ],
+)
+
